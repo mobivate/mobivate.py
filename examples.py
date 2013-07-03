@@ -1,10 +1,9 @@
-from mobivate import Mobivate
-
+import mobivate
 
 def main():
     email = '87742579@mailinator.com'
     password = 'KWsgUeOrOtAmfkjT'
-    m = Mobivate(email, password)
+    m = mobivate.Api(email, password)
     print m.send('Hello world')
 
 

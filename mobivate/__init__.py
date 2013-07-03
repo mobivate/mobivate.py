@@ -1,1 +1,1 @@
-from .mobivate import Mobivate
+from .api import Api

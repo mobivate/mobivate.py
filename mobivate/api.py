@@ -5,7 +5,7 @@ from connection import Connection
 from requesttype import RequestType
 
 
-class Mobivate:
+class Api:
 
     def __init__(self, username, password):
         self.session_id = None
