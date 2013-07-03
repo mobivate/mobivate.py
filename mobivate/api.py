@@ -22,7 +22,7 @@ class Api(object):
         xml_resp = self.connection.request(xml=None, type=RequestType.routes)
         routes = xmltodict.parse(xml_resp)
         if not routes.get('xaresponse'):
-            raise Exception('Could not popular routes, malformed response')
+            raise Exception('Could not populate routes, malformed API response')
         return routes.get('xaresponse').get('entitylist').get('userroutepricing').get('userRouteId')
 
     def send(self, originator, recipient, message):

@@ -11,7 +11,7 @@ def random_salt():
     return ''.join(chars)
 
 def dict_to_xml(root):
-    xml = ''
+    xml = str()
     for key in root.keys():
         if isinstance(root[key], dict):
             xml = '%s<%s>\n%s</%s>\n' % (xml, key, dict_to_xml(root[key]), key)
