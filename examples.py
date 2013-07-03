@@ -1,7 +1,7 @@
 import mobivate
 
 def main():
-    email = 'carl000@gmail.net'
+    email = 'myname@gmail.com'
     password = 'password'
     m = mobivate.Api(email, password)
     print m.send('Hello world')

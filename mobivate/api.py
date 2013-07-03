@@ -3,27 +3,36 @@ import json
 import utils
 from connection import Connection
 from requesttype import RequestType
+import xmltodict
 
 
-class Api:
+class Api(object):
 
     def __init__(self, username, password):
-        self.session_id = None
+        self.username = username
+        self.password = password
+        self.connection = Connection(self.username, self.password)
         self.routes = self.populate_routes()
-        self.connection = Connection(username, password)
 
     def get_route(self):
         return NotImplemented
 
     def populate_routes(self):
-        xml = self.connection.request(RequestType.routes)
-        print xml
+        # TODO routes class populate
+        xml = self.connection.request(xml=None, type=RequestType.routes)
+        routes = xmltodict.parse(xml)
+        if not routes.get('xaresponse'):
+            raise Exception('Could not popular routes, malformed response')
+        return routes.get('xaresponse').get('entitylist').get('userroutepricing').get('userRouteId')
 
     def send(self, message):
+        route_id = self.routes
         data = {
-            'originator': '447800000000',
+            'originator': '447899999999',
             'recipient':  '447800000000',
-            'body': 'Hello world'
+            'body': 'Hello world',
+            'reference': utils.random_number(),
+            'routeId': route_id,
         }
         xml_resp = self.connection.request(xml=data, type=RequestType.single_message)
         return xml_resp

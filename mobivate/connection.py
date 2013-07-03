@@ -4,7 +4,7 @@ import xmltodict
 import utils
 
 
-class Connection():
+class Connection(object):
 
     def __init__(self, username, password):
         self.authentication = 'http://app.mobivatebulksms.com/bulksms/xmlapi/login/{0}/{1}'
@@ -24,7 +24,7 @@ class Connection():
 
     def connect(self):
         try:
-            r = self.request(type=RequestType.login)
+            r = self.request(xml=None, type=RequestType.login)
             self.session_id = xmltodict.parse(r).get('xaresponse').get('session')
         except Exception:
             raise
@@ -36,7 +36,6 @@ class Connection():
         if xml:
             xml = utils.dict_to_xml({'message': xml})
             post_data = {'xml': xml}
-            print post_data
 
         if type is RequestType.login:
             url = self.authentication.format(self._username, self._password)
@@ -45,7 +44,7 @@ class Connection():
         elif type is RequestType.single_message:
             url = self.send_single_sms.format(self.session_id)
         elif type is RequestType.routes:
-            url = self.routes_url(self.session_id)
+            url = self.routes_url.format(self.session_id)
         else:
             raise Exception('Invalid RequestType')
 
