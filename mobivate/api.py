@@ -19,23 +19,26 @@ class Api(object):
 
     def populate_routes(self):
         # TODO routes class populate
-        xml = self.connection.request(xml=None, type=RequestType.routes)
-        routes = xmltodict.parse(xml)
+        xml_resp = self.connection.request(xml=None, type=RequestType.routes)
+        routes = xmltodict.parse(xml_resp)
         if not routes.get('xaresponse'):
             raise Exception('Could not popular routes, malformed response')
         return routes.get('xaresponse').get('entitylist').get('userroutepricing').get('userRouteId')
 
-    def send(self, message):
+    def send(self, originator, recipient, message):
         route_id = self.routes
         data = {
-            'originator': '447899999999',
-            'recipient':  '447800000000',
-            'body': 'Hello world',
+            'originator': originator,
+            'recipient':  recipient,
+            'body': message,
             'reference': utils.random_number(),
             'routeId': route_id,
         }
         xml_resp = self.connection.request(xml=data, type=RequestType.single_message)
-        return xml_resp
+        resp = xmltodict.parse(xml_resp)
+        if not resp.get('xaresponse').get('message').get('id'):
+            raise Exception('Message send failed')
+        return resp.get('xaresponse').get('message').get('id')
 
     def register(self):
         url = 'http://www.mobivate.com/do_signup.php'
