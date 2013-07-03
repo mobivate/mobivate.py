@@ -9,14 +9,15 @@ class Api:
 
     def __init__(self, username, password):
         self.session_id = None
-        self.routes = None
+        self.routes = self.populate_routes()
         self.connection = Connection(username, password)
 
     def get_route(self):
         return NotImplemented
 
     def populate_routes(self):
-        return NotImplemented
+        xml = self.connection.request(RequestType.routes)
+        print xml
 
     def send(self, message):
         data = {

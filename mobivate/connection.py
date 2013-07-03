@@ -20,7 +20,7 @@ class Connection():
     def connection(cls, username, password):
         cls._username = username
         cls._password = password
-        return cls
+        return cls(username, password)
 
     def connect(self):
         try:
@@ -34,8 +34,9 @@ class Connection():
             self.connect()
 
         if xml:
-            xml = {'message': utils.dict_to_xml(xml)}
+            xml = utils.dict_to_xml({'message': xml})
             post_data = {'xml': xml}
+            print post_data
 
         if type is RequestType.login:
             url = self.authentication.format(self._username, self._password)
