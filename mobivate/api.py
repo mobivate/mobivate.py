@@ -36,9 +36,10 @@ class Api(object):
         }
         xml_resp = self.connection.request(xml=data, type=RequestType.single_message)
         resp = xmltodict.parse(xml_resp)
+
         if not resp.get('xaresponse').get('message').get('id'):
             raise Exception('Message send failed')
-        return resp.get('xaresponse').get('message').get('id')
+        return True
 
     def register(self):
         url = 'http://www.mobivate.com/do_signup.php'
