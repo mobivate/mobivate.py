@@ -8,7 +8,11 @@ import xmltodict
 
 class Api(object):
 
-    def __init__(self, username=None, password=None):
+    def __init__(self, username=None, password=None, options=None):
+        if not options:
+            options = {}
+        self.options = options
+
         if not username or not password:
             # if not login specified, register a new account
             user = self._random_register()
@@ -18,6 +22,7 @@ class Api(object):
         self.username = username
         self.password = password
         self.connection = Connection(self.username, self.password)
+        self.connection.proxy = options.get('proxy')
         self.routes = self.populate_routes()
 
     def get_route(self):
@@ -27,6 +32,7 @@ class Api(object):
         # TODO routes class populate
         xml_resp = self.connection.request(xml=None, type=RequestType.routes)
         routes = xmltodict.parse(xml_resp)
+
         if not routes.get('xaresponse'):
             raise Exception('Could not populate routes, malformed API response')
         return routes.get('xaresponse').get('entitylist').get('userroutepricing').get('userRouteId')
