@@ -50,7 +50,7 @@ class Connection(object):
             raise Exception('Invalid RequestType')
 
         req_headers = {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)'}
-        
+
         if self.proxy is True:
             url = 'http://youtubeproxy.org/default.aspx?prx={0}'.format(url)
 

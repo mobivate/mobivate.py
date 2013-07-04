@@ -25,9 +25,6 @@ class Api(object):
         self.connection.proxy = options.get('proxy')
         self.routes = self.populate_routes()
 
-    def get_route(self):
-        return NotImplemented
-
     def populate_routes(self):
         # TODO routes class populate
         xml_resp = self.connection.request(xml=None, type=RequestType.routes)
@@ -35,10 +32,27 @@ class Api(object):
 
         if not routes.get('xaresponse'):
             raise Exception('Could not populate routes, malformed API response')
-        return routes.get('xaresponse').get('entitylist').get('userroutepricing').get('userRouteId')
+        return routes.get('xaresponse').get('entitylist').get('userroutepricing')
+
+    def _get_route_id(self, number):
+        # get the user route id for the current number
+        # changes based on country of recipient
+        user_route_id = None
+        for route in self.routes:
+            try:
+                if number.startswith(route.get('countryCode')):
+                    user_route_id = route.get('userRouteId')
+                    print route.get('countryName')
+                    break
+            except Exception:
+                user_route_id = self.routes.get('userRouteId')
+
+        if not user_route_id:
+            raise Exception('Could not determine user route id')
+        return user_route_id
 
     def send(self, originator, recipient, message):
-        route_id = self.routes
+        route_id = self._get_route_id(recipient)
         data = {
             'originator': originator,
             'recipient':  recipient,
@@ -59,10 +73,10 @@ class Api(object):
         password = utils.random_salt()
         data = {
             'company': '',
-            'currency': 'GBP',
+            'currency': 'GBP', # must be USD or API will return less routes
             'email':  email,
             'fullname': utils.random_salt(),
-            'mobile': '4478' + utils.random_number(),
+            'mobile': '447' + utils.random_number(),
             'password': password,
             'password2': password,
         }
