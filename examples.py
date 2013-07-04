@@ -2,10 +2,11 @@ import mobivate
 
 
 def main():
-    email = 'test@test1.com'
+    email = 'user@email.com'
     password = 'password'
-    m = mobivate.Api(email, password)
-    print m.send(originator='07811111111', recipient='447800000000', message='Hello world!')
+    #m = mobivate.Api(email, password)
+    m = mobivate.Api()
+    m.send(originator='07855555555', recipient='447825876544', message='Hello world')
 
 if __name__ == '__main__':
     main()

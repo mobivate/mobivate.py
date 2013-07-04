@@ -8,7 +8,13 @@ import xmltodict
 
 class Api(object):
 
-    def __init__(self, username, password):
+    def __init__(self, username=None, password=None):
+        if not username or not password:
+            # if not login specified, register a new account
+            user = self._random_register()
+            username = user.get('email')
+            password = user.get('password')
+
         self.username = username
         self.password = password
         self.connection = Connection(self.username, self.password)
@@ -41,7 +47,7 @@ class Api(object):
             raise Exception('Message send failed')
         return True
 
-    def register(self):
+    def _random_register(self):
         url = 'http://www.mobivate.com/do_signup.php'
         email = utils.random_number() + '@mailinator.com'
         password = utils.random_salt()
