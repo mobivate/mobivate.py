@@ -42,7 +42,6 @@ class Api(object):
             try:
                 if number.startswith(route.get('countryCode')):
                     user_route_id = route.get('userRouteId')
-                    print route.get('countryName')
                     break
             except Exception:
                 user_route_id = self.routes.get('userRouteId')
@@ -73,7 +72,7 @@ class Api(object):
         password = utils.random_salt()
         data = {
             'company': '',
-            'currency': 'GBP', # must be USD or API will return less routes
+            'currency': 'USD', # must be USD or API will return less routes
             'email':  email,
             'fullname': utils.random_salt(),
             'mobile': '447' + utils.random_number(),
