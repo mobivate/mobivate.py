@@ -65,28 +65,3 @@ class Api(object):
         if not resp.get('xaresponse').get('message').get('id'):
             raise Exception('Message send failed')
         return True
-
-    def _random_register(self):
-        url = 'http://www.mobivate.com/do_signup.php'
-        email = utils.random_number() + '@mailinator.com'
-        password = utils.random_salt()
-        data = {
-            'company': '',
-            'currency': 'USD', # must be USD or API will return less routes
-            'email':  email,
-            'fullname': utils.random_salt(),
-            'mobile': '447' + utils.random_number(),
-            'password': password,
-            'password2': password,
-        }
-        r = requests.post(url, data=data)
-        json_resp = json.loads(r.text)
-
-        if json_resp.get('ok'):  # registration successful
-            user = {
-                'email': email,
-                'password': password,
-            }
-            return user
-        else:  # registration failed
-            return {}
