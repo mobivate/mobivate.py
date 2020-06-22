@@ -15,7 +15,6 @@ class Connection(object):
         self._username = username
         self._password = password
         self.session_id = None
-        self.proxy = None
 
     @classmethod
     def connection(cls, username, password):
@@ -50,9 +49,6 @@ class Connection(object):
             raise Exception('Invalid RequestType')
 
         req_headers = {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)'}
-
-        if self.proxy is True:
-            url = 'http://youtubeproxy.org/default.aspx?prx={0}'.format(url)
 
         if xml:
             r = requests.post(url, data=post_data, headers=req_headers)
